@@ -1,0 +1,6 @@
+---
+- name: Deploy on OpenStack
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - deploy

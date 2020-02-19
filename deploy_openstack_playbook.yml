@@ -1,0 +1,30 @@
+---
+- name: Deploy on OpenStack
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: Importing tenant information and credentials
+    include_vars:
+      file: "credentials.yml"
+  - name : Create a new instance
+    os_server:
+      state: present
+      auth:
+        auth_url: "{{ auth_url  }}"
+        username: "{{ username  }}"
+        password: "{{ password  }}"
+        tenant_name: "{{ tenant_name  }}"
+        user_domain_name: "{{ user_domain_name  }}"
+        project_id: "{{ project_id }}"
+      name: "{{ name  }}"
+      image: "{{ image }}"
+      flavor: "{{ flavor  }}"
+      auto_ip: yes
+      key_name: "{{ keypair_id }}"
+      timeout: 200
+      nics:
+        - net-id: "{{ net_id }}"
+        #- net-name: "{{ net_name }}"
+      meta:
+        type: "{{ type }}"
+        project: "{{ project }}"
