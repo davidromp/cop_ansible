@@ -1,8 +1,4 @@
 ---
-- name: Importing tenant information and credentials
-  include_vars:
-    file: "credentials.yml"
-
 - name : Create new instance {{ name }}
   os_server:
     state: present
@@ -13,12 +9,12 @@
       tenant_name: "{{ tenant_name  }}"
       user_domain_name: "{{ user_domain_name  }}"
       project_id: "{{ project_id }}"
-    name: "{{ name  }}"
-    image: "{{ image }}"
-    flavor: "{{ flavor  }}"
-    key_name: "{{ keypair_id }}"
+    name: "{{ name }}"
+    image: "{{ metadata.image }}"
+    flavor: "{{ metadata.flavor  }}"
+    key_name: "{{ metadata.keypair_id }}"
     nics:
-      - net-id: "{{ net_id }}"
+      - net-id: "{{ metadata.net_id }}"
     meta:
-      type: "{{ type }}"
-      project: "{{ project }}"
+      type: "{{ metadata.type }}"
+      project: "{{ metadata.project }}"

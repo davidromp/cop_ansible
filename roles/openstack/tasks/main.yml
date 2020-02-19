@@ -1,0 +1,11 @@
+---
+- name: Importing tenant information and credentials
+  include_vars:
+    file: "credentials.yml"
+  no_log: true
+
+- include_tasks: create.yml
+  vars:
+    name: "{{ metadata.name }}-{{ item }}"
+  with_sequence: start=1 end={{ metadata.number | int }}
+  when: action == 'DEPLOY'

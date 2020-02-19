@@ -2,5 +2,15 @@
 - name: Deploy on OpenStack
   hosts: localhost
   gather_facts: false
-  roles:
-    - deploy
+  tasks:
+    - name: "Importing hotst information"
+      include_vars:
+        file: "hosts.yml"
+    - name: "Deploying hosts"
+      include_role: 
+        name: openstack
+      vars:
+        action: "DEPLOY"
+      loop: "{{ hosts }}"
+      loop_control:
+        loop_var: metadata
