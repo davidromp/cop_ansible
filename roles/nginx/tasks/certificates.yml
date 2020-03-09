@@ -1,0 +1,38 @@
+---
+
+- name: "Create ssl directory"
+  file:
+    state: directory
+    path: "/etc/nginx/ssl"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: "Copy CA"
+  copy:
+    src: ca/
+    dest: /root/root_ca/
+
+- name: "Generate an OpenSSL private key with the default values (4096 bits, RSA)"
+  openssl_privatekey:
+    path: /etc/nginx/ssl/{{ domain_name }}.key
+
+- name: "Generate an OpenSSL Certificate Signing Request"
+  openssl_csr:
+    path: /etc/nginx/ssl/{{ domain_name }}.csr
+    privatekey_path: /etc/nginx/ssl/{{ domain_name }}.key
+    common_name: "{{ domain_name }}"
+
+- name: "Generate an OpenSSL certificate signed with your own CA certificate"
+  openssl_certificate:
+    path: /etc/nginx/ssl/{{ domain_name }}.crt
+    csr_path: /etc/nginx/ssl/{{ domain_name }}.csr
+    ownca_path: /root/root_ca/ca.crt
+    ownca_privatekey_path: /root/root_ca/ca.key
+    provider: ownca
+
+- name: "Remove ca directory"
+  file:
+    path: /root/root_ca/
+    state: absent
+    

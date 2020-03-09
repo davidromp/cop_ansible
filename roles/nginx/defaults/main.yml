@@ -1,0 +1,2 @@
+domain_name: lewis.love.puzolana
+nginx_conf_file: /etc/nginx/nginx.conf

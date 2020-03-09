@@ -1,0 +1,10 @@
+---
+- name: Copy nginx configuration
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_file }}"
+    force: yes
+    owner: nginx
+    group: nginx
+    mode: 0644
+  notify: restart nginx

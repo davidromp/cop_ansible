@@ -18,3 +18,11 @@
     meta:
       type: "{{ metadata.type }}"
       project: "{{ metadata.project }}"
+  register: result
+
+- name: Add instance {{ name }} to inventory
+  lineinfile:
+      path: "{{ playbook_dir }}/inventories/hosts"
+      line: "{{ name }} ansible_ssh_user=cloud-user ansible_host={{ result.openstack.accessIPv4 }}"
+      create: yes
+    

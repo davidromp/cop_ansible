@@ -1,0 +1,22 @@
+---
+- name: "Copy repository file"
+  copy:
+    src: default.repo
+    dest: /etc/yum.repos.d/default.repo
+    force: yes
+
+- name: "Update all packages"
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: "install redhat packages"
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - vim
+    - curl
+    - wget

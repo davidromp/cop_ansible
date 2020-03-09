@@ -1,0 +1,24 @@
+---
+- name: Create inventory folder
+  file:
+    path: inventories/
+    state: directory
+
+- name: Delete old inventory
+  file:
+    path: inventories/hosts
+    state: absent
+
+- name: Create inventory file
+  file:
+    path: inventories/hosts
+    state: touch
+
+- name: Add all vars
+  lineinfile:
+    path: "{{ playbook_dir }}/inventories/hosts"
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - '[all:vars]'
+    - 'ansible_ssh_private_key_file={{ playbook_dir }}/testkeypair.pem'

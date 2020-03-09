@@ -16,9 +16,9 @@
         tenant_name: "{{ tenant_name  }}"
         user_domain_name: "{{ user_domain_name  }}"
         project_id: "{{ project_id }}"
-      name: "{{ name  }}"
+      name: "{{ name }}"
       image: "{{ image }}"
-      flavor: "{{ flavor  }}"
+      flavor: "{{ flavor }}"
       auto_ip: yes
       key_name: "{{ keypair_id }}"
       timeout: 200

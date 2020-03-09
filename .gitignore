@@ -1,2 +1,5 @@
 *.pem
 credentials.yml
+roles/nginx/files/ca/
+inventories/hosts
+.facts

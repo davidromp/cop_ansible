@@ -1,0 +1,19 @@
+---
+- name: Create www folder
+  file:
+    name: "/var/www/html/{{ domain_name }}"
+    state: directory
+    owner: nginx
+    group: nginx
+
+- name: Copy index.html
+  copy:
+    src: index.html
+    dest: "/var/www/html/{{ domain_name }}/"
+    force: yes
+    owner: nginx
+    group: nginx
+
+- name: Url for browsers
+  debug:
+    msg: "https://{{ansible_host}}/"

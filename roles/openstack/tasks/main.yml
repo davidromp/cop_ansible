@@ -4,6 +4,12 @@
     file: "credentials.yml"
   no_log: true
 
+- name: Add metagroup for inventory
+  lineinfile:
+    path: "{{ playbook_dir }}/inventories/hosts"
+    line: "[{{ metadata.name }}]"
+    create: yes
+
 - include_tasks: create.yml
   vars:
     name: "{{ metadata.name }}-{{ item }}"
