@@ -1,4 +1,12 @@
 ---
 - import_tasks: hostname.yml
+  tags:
+    - hostname
+
 - import_tasks: packages.yml
+  tags:
+    - common_packages
+
 - import_tasks: pip.yml
+  tags:
+    - pip

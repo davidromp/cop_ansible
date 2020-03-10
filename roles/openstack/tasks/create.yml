@@ -1,5 +1,11 @@
 ---
-- name : Create new instance {{ name }}
+- name: Add metagroup for inventory
+  lineinfile:
+    path: "{{ playbook_dir }}/inventories/hosts"
+    line: "[{{ metadata.name }}]"
+    create: yes
+
+- name: Desploying instance {{ name }}
   os_server:
     state: present
     auth:
@@ -22,7 +28,6 @@
 
 - name: Add instance {{ name }} to inventory
   lineinfile:
-      path: "{{ playbook_dir }}/inventories/hosts"
-      line: "{{ name }} ansible_ssh_user=cloud-user ansible_host={{ result.openstack.accessIPv4 }}"
-      create: yes
-    
+    path: "{{ playbook_dir }}/inventories/hosts"
+    line: "{{ name }} ansible_ssh_user=cloud-user ansible_host={{ result.openstack.accessIPv4 }}"
+    create: yes

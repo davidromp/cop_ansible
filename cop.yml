@@ -6,24 +6,44 @@
     - name: "Creating raw inventory"
       include_role: 
         name: inventory
+      tags:
+        - create_inventory
     - name: "Importing hosts information"
       include_vars:
         file: "hosts.yml"
+      tags:
+        - create_inventory
     - name: "Deploying hosts"
       include_role: 
         name: openstack
       vars:
-        action: "DEPLOY"
+        action: "{{ deploy_action }}"
       loop: "{{ hosts }}"
       loop_control:
         loop_var: metadata
+      tags:
+        - create_inventory
     - name: Get inventory
       meta: refresh_inventory
+      tags:
+        - create_inventory
 
 - name: Deploy roles common, nginx
   hosts: dromero
   gather_facts: true
   become: yes
-  roles:
-    - common
-    - nginx
+  tasks:
+    - name: Wait for connection with server
+      wait_for_connection:
+        delay: 20
+        timeout: 300
+    - name: "Deploy common role"
+      include_role: 
+        name: common
+      when: deploy_action == 'DEPLOY'
+    - name: "Deploy common role"
+      include_role: 
+        name: nginx
+      when: deploy_action == 'DEPLOY'
+
+  

@@ -1,0 +1,12 @@
+---
+- name: Destroying instance {{ name }}
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{ auth_url  }}"
+      username: "{{ username  }}"
+      password: "{{ password  }}"
+      tenant_name: "{{ tenant_name  }}"
+      user_domain_name: "{{ user_domain_name  }}"
+      project_id: "{{ project_id }}"
+    name: "{{ name }}"

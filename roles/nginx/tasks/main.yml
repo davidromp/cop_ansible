@@ -1,5 +1,16 @@
 ---
 - import_tasks: install.yml
+  tags:
+    - ningx_install
+
 - import_tasks: certificates.yml
+  tags:
+    - ningx_certificates
+
 - import_tasks: configure.yml
+  tags:
+    - ningx_configuration
+
 - import_tasks: www.yml
+  tags:
+    - index_html

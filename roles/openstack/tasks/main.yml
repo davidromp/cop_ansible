@@ -3,15 +3,21 @@
   include_vars:
     file: "credentials.yml"
   no_log: true
-
-- name: Add metagroup for inventory
-  lineinfile:
-    path: "{{ playbook_dir }}/inventories/hosts"
-    line: "[{{ metadata.name }}]"
-    create: yes
+  tags:
+    - create_inventory
 
 - include_tasks: create.yml
   vars:
     name: "{{ metadata.name }}-{{ item }}"
+    host_state: "present"
   with_sequence: start=1 end={{ metadata.number | int }}
   when: action == 'DEPLOY'
+  tags:
+    - create_inventory
+
+- include_tasks: destroy.yml
+  vars:
+    name: "{{ metadata.name }}-{{ item }}"
+    host_state: "absent"
+  with_sequence: start=1 end={{ metadata.number | int }}
+  when: action == 'DESTROY'
