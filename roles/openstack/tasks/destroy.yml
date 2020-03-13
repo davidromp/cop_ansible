@@ -10,3 +10,12 @@
       user_domain_name: "{{ user_domain_name  }}"
       project_id: "{{ project_id }}"
     name: "{{ name }}"
+    image: "{{ metadata.image }}"
+    flavor: "{{ metadata.flavor  }}"
+    key_name: "{{ metadata.keypair_id }}"
+    nics:
+      - net-id: "{{ metadata.net_id }}"
+    meta:
+      type: "{{ metadata.type }}"
+      project: "{{ metadata.project }}"
+
