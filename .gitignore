@@ -3,3 +3,4 @@ credentials.yml
 roles/nginx/files/ca/
 inventories/hosts
 .facts
+roles/inventory/files/internal_pass

@@ -1,0 +1,21 @@
+---
+- name: Download gitea 1.9.4
+  get_url:
+    url: https://github.com/go-gitea/gitea/releases/download/v1.9.4/gitea-1.9.4-linux-amd64
+    dest: /usr/local/bin/gitea
+    mode: '0777'
+
+- name: Copy service file
+  copy:
+    src: gitea.service
+    dest: /etc/systemd/system/gitea.service
+
+- name: Reload systemd
+  systemd:
+    daemon-reload: yes
+
+- name: Enabling and starting gitea
+  systemd:
+    state: started
+    enabled: yes
+    name: gitea

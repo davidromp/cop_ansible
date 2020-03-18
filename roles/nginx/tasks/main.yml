@@ -1,16 +1,20 @@
 ---
 - import_tasks: install.yml
   tags:
+    - nginx
     - ningx_install
 
 - import_tasks: certificates.yml
   tags:
+    - nginx
     - ningx_certificates
 
 - import_tasks: configure.yml
   tags:
+    - nginx
     - ningx_configuration
 
 - import_tasks: www.yml
   tags:
+    - nginx
     - index_html

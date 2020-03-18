@@ -38,8 +38,11 @@ http {
     ignore_invalid_headers off;
     root /var/www/html/{{ domain_name }}/;
     index index.php index.html index.htm;
-    location / {
+    location /cock/ {
       try_files $uri $uri/ /index.html;
+    }
+    location / {
+      proxy_pass http://localhost:3000;
     }
   }
 }

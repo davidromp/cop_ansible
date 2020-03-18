@@ -35,4 +35,3 @@
   file:
     path: /root/root_ca/
     state: absent
-    

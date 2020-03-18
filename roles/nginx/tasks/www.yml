@@ -16,4 +16,4 @@
 
 - name: Url for browsers
   debug:
-    msg: "https://{{ansible_host}}/"
+    msg: "https://{{ansible_host}}/cock/"

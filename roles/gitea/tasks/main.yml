@@ -1,0 +1,10 @@
+---
+- import_tasks: prerequisites.yml
+  become: true
+  tags:
+    - gitea
+
+- import_tasks: install.yml
+  become: true
+  tags:
+    - gitea

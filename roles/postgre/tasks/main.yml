@@ -1,0 +1,4 @@
+- import_tasks: install.yml
+  become: true
+  tags:
+    - postgre

@@ -1,0 +1,9 @@
+---
+postgresql_dir: "/var/lib/pgsql/9.6"
+postgresql_datadir: "/var/lib/pgsql/9.6/data"
+postgresql_configdir: "/usr/lib/systemd/system"
+postgresql_userdir: "/var/lib/pgsql"
+postgresql_bin: "/usr/pgsql-9.6/bin"
+postgresql_port: "5432"
+postgresql_admin_user: "postgres"
+postgresql_shared_buffers_percentage: 25

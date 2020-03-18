@@ -1,7 +1,7 @@
 ---
 - name: Destroying instance {{ name }}
   os_server:
-    state: present
+    state: absent
     auth:
       auth_url: "{{ auth_url  }}"
       username: "{{ username  }}"
@@ -18,4 +18,3 @@
     meta:
       type: "{{ metadata.type }}"
       project: "{{ metadata.project }}"
-

@@ -28,7 +28,7 @@
       tags:
         - create_inventory
 
-- name: Deploy roles common, nginx
+- name: Deploy roles common, postges, gitea, nginx
   hosts: dromero
   gather_facts: true
   become: yes
@@ -41,9 +41,21 @@
       include_role: 
         name: common
       when: deploy_action == 'DEPLOY'
-    - name: "Deploy common role"
+    - name: "Deploy postgre role"
+      include_role: 
+        name: postgre
+      when: deploy_action == 'DEPLOY'
+    - name: "Deploy gitea role"
+      include_role: 
+        name: gitea
+      when: deploy_action == 'DEPLOY'  
+      tags:
+        - gitea  
+    - name: "Deploy nginx role"
       include_role: 
         name: nginx
       when: deploy_action == 'DEPLOY'
+      tags:
+        - nginx
 
   

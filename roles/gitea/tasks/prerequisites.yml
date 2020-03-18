@@ -1,0 +1,42 @@
+---
+- name: install git package
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - git
+    - bash-completion
+
+- name: Add user git
+  user:
+    name: git
+    system: yes
+    shell: /bin/bash
+    comment: "Git Version Control"
+    create_home: yes
+    home: /home/git
+
+- name: Creating gitea folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0750"
+    owner: "git"
+    group: "git"
+  loop:
+    - /var/lib/gitea
+    - /var/lib/gitea/custom
+    - /var/lib/gitea/public
+    - /var/lib/gitea/data
+    - /var/lib/gitea/indexers
+    - /var/lib/gitea/log
+
+- name: Creating /etc/gitea folder
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0770"
+    owner: "root"
+    group: "git"
+  loop:
+    - /etc/gitea

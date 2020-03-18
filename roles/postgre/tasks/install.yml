@@ -1,0 +1,157 @@
+---
+- name: Copy PostgreSQL rpm
+  copy:
+    src: "{{item}}"
+    dest: "/tmp/{{item}}"
+    force: yes
+  loop:
+    - postgresql96-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - postgresql96-server-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - python-psycopg2-2.7.1-1.rhel7.x86_64.rpm
+    - postgresql96-libs-9.6.3-1PGDG.rhel7.x86_64.rpm
+  tags:
+    - postgre
+
+- name: Install PostgreSQL rpm
+  yum:
+    state: present
+    name: "{{ item }}"
+  loop:
+    - /tmp/postgresql96-libs-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - /tmp/postgresql96-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - /tmp/postgresql96-server-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - /tmp/python-psycopg2-2.7.1-1.rhel7.x86_64.rpm
+  tags:
+    - postgre
+
+- name: Find psql files
+  find:
+    paths: 
+      - "{{ postgresql_datadir }}"
+    file_type: directory
+    patterns: "*"
+  register: dir_files
+  tags:
+    - postgre
+
+- name: Copy PostgreSQL service file
+  template:
+    src: postgresql-9.6.service.j2
+    dest: "/etc/systemd/system/postgresql-9.6.service"
+    owner: root
+    group: root
+    mode: 0644
+    force: yes
+
+- name: Reload systemd
+  systemd:
+    daemon-reload: yes
+
+- name: Initialize PostgreSQL data dir
+  become: yes
+  become_user: root
+  command: "{{ postgresql_bin }}/postgresql96-setup initdb"
+  when: dir_files.matched|int == 0
+  tags:
+    - postgre
+
+- name: Start PostgreSQL
+  systemd:
+    name: postgresql-9.6
+    state: started
+    enabled: yes
+  tags:
+    - postgre
+
+- name: Copy confs
+  become: yes
+  become_user: root
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ postgresql_datadir }}/{{ item | replace('templates/','') }}"
+    owner: postgres
+    group: postgres
+  loop:
+    - templates/postgresql.conf
+    - templates/pg_hba.conf
+  tags:
+    - postgre
+
+- name: Restart PostgreSQL
+  systemd:
+    name: postgresql-9.6
+    state: restarted
+    enabled: yes
+  tags:
+    - postgre
+
+- name: Create default databases
+  postgresql_db:
+    name: "{{ item }}"
+    encoding: UTF-8
+    lc_collate: es_ES.UTF-8
+    lc_ctype: es_ES.UTF-8
+    template: template0
+  become: true
+  become_user: postgres
+  loop:
+    - "{{ default_db }}"
+  tags:
+    - postgre
+
+- name: Create postgresql user
+  postgresql_user:
+   name: "{{ internal_user }}"
+   password: "{{ internal_pass }}"
+   encrypted: true
+   db: "{{ default_db }}"
+   priv: ALL
+   role_attr_flags: NOSUPERUSER
+  become: true
+  become_user: postgres
+  tags:
+    - postgre
+
+- name: Grant privileges to admin on {{ default_db }}'s tables
+  become: true
+  become_user: postgres
+  postgresql_privs:
+    database: "{{ default_db }}"
+    state: present
+    privs: ALL
+    objs: ALL_IN_SCHEMA
+    schema: public
+    type: table
+    roles: "{{ internal_user }}"
+  tags:
+    - postgre
+
+- name: Grant privileges to admin on {{ default_db }}'s sequences
+  become: true
+  become_user: postgres
+  postgresql_privs:
+    database: "{{ default_db }}"
+    state: present
+    privs: ALL
+    objs: ALL_IN_SCHEMA
+    schema: public
+    type: sequence
+    roles: "{{ internal_user }}"
+  tags:
+    - postgre
+
+- name: Delete rpm files
+  file:
+     state: absent
+     path: "/tmp/{{item}}"
+  loop:
+    - postgresql96-libs-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - postgresql96-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - postgresql96-server-9.6.3-1PGDG.rhel7.x86_64.rpm
+    - python-psycopg2-2.7.1-1.rhel7.x86_64.rpm
+  tags:
+    - postgre
+
+- name: Reloading systemd
+  systemd:
+    daemon_reload: yes
