@@ -1,0 +1,13 @@
+---
+- name: gitea restart
+  systemd:
+    name: gitea
+    state: restarted
+  become: yes
+
+- name: gitea start
+  systemd:
+    name: gitea
+    enabled: yes
+    state: started
+  become: yes

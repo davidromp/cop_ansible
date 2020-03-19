@@ -8,3 +8,8 @@
   become: true
   tags:
     - gitea
+
+- import_tasks: configure.yml
+  become: true
+  tags:
+    - gitea

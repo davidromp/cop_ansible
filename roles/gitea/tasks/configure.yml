@@ -1,0 +1,10 @@
+---
+- name: Copy app.ini
+  template:
+    src: gitea.ini.j2
+    dest: /etc/gitea/app.ini
+    mode: "0644"
+    owner: "git"
+    group: "git"
+    force: yes
+  notify: gitea restart

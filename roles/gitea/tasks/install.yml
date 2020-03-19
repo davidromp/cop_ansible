@@ -13,9 +13,4 @@
 - name: Reload systemd
   systemd:
     daemon-reload: yes
-
-- name: Enabling and starting gitea
-  systemd:
-    state: started
-    enabled: yes
-    name: gitea
+  notify: gitea start
