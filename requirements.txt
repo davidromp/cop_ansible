@@ -2,7 +2,7 @@ setuptools==40.8.0
 requests==2.22.0
 six==1.12.0
 cryptography==2.5.0
-urllib3==1.25.3
+urllib3==1.26.5
 ansible==2.8.5
 pyOpenSSL==19.0.0
 apache-libcloud==2.6.0
